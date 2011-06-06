@@ -1,0 +1,17 @@
+settings:
+    base_uri: localhost:4567
+web_services:
+  - endpoint: /users/1.json
+    verb:       get
+    params:
+      api_token:
+        example_value: abc123
+        required:      true
+        description:   The API token that you got in your confirmation email
+  - endpoint: /dogs/1.json
+    verb:       get
+    params:
+      breed:
+        example_value: bulldog
+        required:      true
+        description:   The name of the breed of dog you're interested in...
