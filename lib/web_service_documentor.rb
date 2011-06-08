@@ -8,6 +8,7 @@ class WebServiceDocumentor
       @base_uri = base_uri
       @endpoint = options["endpoint"]
       @params   = options["params"]
+      @method   = options["method"] || "GET"
     end
 
     def to_s
@@ -16,21 +17,33 @@ class WebServiceDocumentor
       #       make use of params
       json_response = JSON.parse(Net::HTTP.get(URI.parse("http://#{@base_uri}#{@endpoint}")))
 
-      body << @endpoint << "\n"
+      body << "\n"
+      body << "==================================================\n"
 
-      if @params
-        body << "Params: \n"
+      body << "URL: #{@endpoint} (#{@method})\n"
+      body << "\n"
 
+      body << "Request Params: \n"
+      body << "\n"
+
+      if @params && @params.any?
         @params.each do |key, value|
-          body << "   #{key} \n"
+          body << "  #{key} \n"
+
           @params[key].each do |k,v|
             body << "    #{k}: #{v} \n"
           end
         end
+      else
+        body << "  None"
       end
 
-      body << "  response: \n"
-      body << "    " << JSON.pretty_generate(json_response)
+      body << "\n"
+      body << "Response: \n"
+      body << "\n"
+      body << JSON.pretty_generate(json_response)
+      body << "\n"
+      body << "\n"
       body
     end
   end
