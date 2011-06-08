@@ -1,21 +1,40 @@
 require 'yaml'
 require 'json'
 require 'net/http'
+require 'cgi'
 
 class WebServiceDocumentor
   class Service
     def initialize(base_uri, options)
-      @base_uri = base_uri
-      @endpoint = options["endpoint"]
-      @params   = options["params"]
-      @method   = options["method"] || "GET"
+      @base_uri       = base_uri
+      @endpoint       = options["endpoint"]
+      @params         = options["params"]
+      @method         = options["method"] || "GET"
+      @example_params = create_example_params
     end
 
     def to_s
       body = ""
-      # TODO: respect HTTP Verb
-      #       make use of params
-      json_response = JSON.parse(Net::HTTP.get(URI.parse("http://#{@base_uri}#{@endpoint}")))
+
+      url = "http://#{@base_uri}#{@endpoint}"
+      uri = URI.parse(url)
+
+      result = if @method =~ /post/
+        Net::HTTP.post_form(uri, @example_params)
+      else
+        http = Net::HTTP.new(uri.host, uri.port)
+        request = Net::HTTP::Get.new(uri.path)
+        request.set_form_data(@example_params)
+
+        request  = Net::HTTP::Get.new("#{uri.path}?#{request.body}")
+        http.request(request)
+      end
+
+      if !result.kind_of?(Net::HTTPOK)
+        raise "Couldn't perform request with url: #{url}"
+      end
+
+      json_response = JSON.parse(result.body)
 
       body << "\n"
       body << "==================================================\n"
@@ -45,6 +64,18 @@ class WebServiceDocumentor
       body << "\n"
       body << "\n"
       body
+    end
+
+  private
+
+    def create_example_params
+      hash = {}
+
+      @params.each do |key, value|
+        hash[key] = value["example_value"]
+      end
+
+      hash
     end
   end
 
