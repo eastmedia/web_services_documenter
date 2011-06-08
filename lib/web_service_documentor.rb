@@ -9,7 +9,7 @@ class WebServiceDocumentor
       @base_uri       = base_uri
       @endpoint       = options["endpoint"]
       @params         = options["params"]
-      @method         = options["method"] || "GET"
+      @method         = (options["method"] || "get").downcase
       @example_params = create_example_params
     end
 
@@ -39,7 +39,7 @@ class WebServiceDocumentor
       body << "\n"
       body << "==================================================\n"
 
-      body << "URL: #{@endpoint} (#{@method})\n"
+      body << "URL: #{@endpoint} (#{@method.upcase})\n"
       body << "\n"
 
       body << "Request Params: \n"
