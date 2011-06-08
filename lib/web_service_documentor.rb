@@ -61,5 +61,3 @@ private
     print body
   end
 end
-
-WebServiceDocumentor.generate("web_services.yml")
