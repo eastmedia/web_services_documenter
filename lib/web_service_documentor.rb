@@ -1,3 +1,4 @@
+require "rubygems"
 require 'yaml'
 require 'json'
 require 'net/http'
