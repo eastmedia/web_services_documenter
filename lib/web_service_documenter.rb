@@ -10,6 +10,7 @@ class WebServiceDocumenter
       @base_uri       = base_uri
       @endpoint       = options["endpoint"]
       @params         = options["params"]
+      @description    = options["description"]
       @method         = (options["method"] || "get").downcase
       @example_params = create_example_params
     end
@@ -42,6 +43,8 @@ class WebServiceDocumenter
 
       body << "URL: #{@endpoint} (#{@method.upcase})\n"
       body << "\n"
+
+      body << "DESCRIPTION: #{@description}" << "\n \n" if @description
 
       body << "Request Params: \n"
       body << "\n"
