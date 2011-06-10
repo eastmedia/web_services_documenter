@@ -4,7 +4,7 @@ require 'json'
 require 'net/http'
 require 'cgi'
 
-class WebServiceDocumentor
+class WebServiceDocumenter
   class Service
     def initialize(base_uri, options)
       @base_uri       = base_uri

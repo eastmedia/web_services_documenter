@@ -1,5 +1,17 @@
+Web Service Documenter is a way of automatically generating documentation
+about your web services using YAML. It documents enpoint URL, parameters, description and
+automatically shows output.
 
+== Installation
+  Clone this repository
+  > gem build web_service_documentor.gemspec
+  > gem install web_service_documentor-x.x.x.gem
 
 == Usage
 
-./bin/web_service_documentor web_services.yml
+  web_service_documentor path/to/your/web_services.yml
+
+== web_services.yml
+
+  A file describing your web service end points.
+  See examples/web_services.yml

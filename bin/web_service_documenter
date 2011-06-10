@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require File.join(File.dirname(__FILE__), "..", "lib", "web_service_documenter")
+
+WebServiceDocumenter.generate(ARGV[0])
