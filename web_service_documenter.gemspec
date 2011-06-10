@@ -1,7 +1,7 @@
 $spec = Gem::Specification.new do |s|
   s.name = "web_service_documenter"
-  s.version = '0.0.1'
-  s.summary = "Deploy with masculine confidence"
+  s.version = '0.0.2'
+  s.summary = "Document your json web services"
 
   s.authors  = ['Scott Taylor', 'Stephen Schor']
   s.email    = ['scott@railsnewbie.com', 'beholdthepanda@gmail.com']
