@@ -1,8 +1,8 @@
-require "rubygems"
 require 'yaml'
 require 'json'
 require 'net/http'
 require 'cgi'
+require 'net/http/post/multipart'
 
 class WebServiceDocumenter
   class Service
@@ -11,8 +11,23 @@ class WebServiceDocumenter
       @endpoint       = options["endpoint"]
       @params         = options["params"]
       @description    = options["description"]
+      @multipart      = options["multipart"] || false
       @method         = (options["method"] || "get").downcase
       @example_params = create_example_params
+    end
+
+    def transform_multipart_example_params
+      new_params = {}
+
+      @example_params.map do |key, value|
+        if value =~ /file\((.*)\,(.*)\,(.*)\)/
+          new_params[key] = UploadIO.new($1.strip, $2.strip, $3.strip)
+        else
+          new_params[key] = value
+        end
+      end
+
+      new_params
     end
 
     def to_s
@@ -22,7 +37,15 @@ class WebServiceDocumenter
       uri = URI.parse(url)
 
       result = if @method =~ /post/
-        Net::HTTP.post_form(uri, @example_params)
+        if @multipart == true
+          request = Net::HTTP::Post::Multipart.new uri.path, transform_multipart_example_params
+
+          Net::HTTP.start(uri.host, uri.port) do |http|
+            http.request(request)
+          end
+        else
+          Net::HTTP.post_form(uri, @example_params)
+        end
       else
         http = Net::HTTP.new(uri.host, uri.port)
         request = Net::HTTP::Get.new(uri.path)

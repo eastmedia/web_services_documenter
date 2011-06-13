@@ -9,6 +9,9 @@ $spec = Gem::Specification.new do |s|
 
   s.executables = ['web_service_documenter']
 
+  s.add_dependency "multipart-post"
+  # s.add_development_dependency "rspec"
+
   s.files = Dir['bin/*','lib/**/*']
   s.rubyforge_project = 'nowarning'
 end
